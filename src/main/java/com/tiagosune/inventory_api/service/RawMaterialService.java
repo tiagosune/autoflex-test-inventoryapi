@@ -4,6 +4,8 @@ import com.tiagosune.inventory_api.dto.RawMaterialCreateRequest;
 import com.tiagosune.inventory_api.dto.RawMaterialResponse;
 import com.tiagosune.inventory_api.dto.RawMaterialUpdateRequest;
 import com.tiagosune.inventory_api.entity.RawMaterial;
+import com.tiagosune.inventory_api.exception.BusinessException;
+import com.tiagosune.inventory_api.exception.ResourceNotFoundException;
 import com.tiagosune.inventory_api.repository.RawMaterialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -67,18 +69,18 @@ public class RawMaterialService {
 
     private RawMaterial findEntityById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Raw material not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Raw material not found"));
     }
 
     private void validateStock(BigDecimal stock) {
         if (stock.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Stock quantity cannot be negative");
+            throw new BusinessException("Stock quantity cannot be negative");
         }
     }
 
     private void validateUniqueCode (String code) {
         if (repository.existsByCode(code)) {
-            throw new IllegalArgumentException("Code already exists");
+            throw new BusinessException("Code already exists");
         }
     }
 
@@ -93,7 +95,7 @@ public class RawMaterialService {
 
     private void validateName (String name) {
         if (name.isBlank()) {
-            throw new IllegalArgumentException("Name cannot be blank");
+            throw new BusinessException("Name cannot be blank");
         }
     }
 
