@@ -1,7 +1,8 @@
 package com.tiagosune.inventory_api.service;
 
-import com.tiagosune.inventory_api.dto.RawMaterialRequest;
+import com.tiagosune.inventory_api.dto.RawMaterialCreateRequest;
 import com.tiagosune.inventory_api.dto.RawMaterialResponse;
+import com.tiagosune.inventory_api.dto.RawMaterialUpdateRequest;
 import com.tiagosune.inventory_api.entity.RawMaterial;
 import com.tiagosune.inventory_api.repository.RawMaterialRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,11 @@ public class RawMaterialService {
 
     private final RawMaterialRepository repository;
 
-    public RawMaterialResponse create (RawMaterialRequest request) {
+    public RawMaterialResponse create (RawMaterialCreateRequest request) {
 
-        validateStock(request.getStockQuantity());
         validateUniqueCode(request.getCode());
+        validateName(request.getName());
+        validateStock(request.getStockQuantity());
 
         RawMaterial rawMaterial = RawMaterial.builder()
                 .code(request.getCode())
@@ -32,8 +34,10 @@ public class RawMaterialService {
         return mapToResponse(rawMaterial);
     }
 
-    public RawMaterialResponse update (Long id, RawMaterialRequest request) {
+    public RawMaterialResponse update (Long id, RawMaterialUpdateRequest request) {
         RawMaterial rawMaterial = findEntityById(id);
+
+        validateName(request.getName());
         validateStock(request.getStockQuantity());
 
         rawMaterial.setName(request.getName());
@@ -53,11 +57,6 @@ public class RawMaterialService {
         return mapToResponse(rawMaterial);
     }
 
-    public RawMaterialResponse findByCode (String code) {
-        RawMaterial rawMaterial = repository.findByCode(code);
-        return mapToResponse(rawMaterial);
-    }
-
     public List<RawMaterialResponse> findAll () {
         return repository.findAll().stream()
                 .map(this::mapToResponse)
@@ -72,7 +71,7 @@ public class RawMaterialService {
     }
 
     private void validateStock(BigDecimal stock) {
-        if (stock.compareTo(BigDecimal.ZERO) <= 0) {
+        if (stock.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Stock quantity cannot be negative");
         }
     }
@@ -90,6 +89,12 @@ public class RawMaterialService {
                 .name(rawMaterial.getName())
                 .stockQuantity(rawMaterial.getStockQuantity())
                 .build();
+    }
+
+    private void validateName (String name) {
+        if (name.isBlank()) {
+            throw new IllegalArgumentException("Name cannot be blank");
+        }
     }
 
 }
