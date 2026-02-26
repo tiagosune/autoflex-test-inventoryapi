@@ -1,4 +1,4 @@
-package com.tiagosune.inventory_api.dto;
+package com.tiagosune.inventory_api.dto.rawmaterial;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

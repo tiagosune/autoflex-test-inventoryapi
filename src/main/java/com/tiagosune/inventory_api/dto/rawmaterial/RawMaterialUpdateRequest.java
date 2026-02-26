@@ -1,4 +1,4 @@
-package com.tiagosune.inventory_api.dto;
+package com.tiagosune.inventory_api.dto.rawmaterial;
 
 import lombok.Data;
 

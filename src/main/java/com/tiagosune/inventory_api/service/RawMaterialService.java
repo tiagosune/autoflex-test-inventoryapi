@@ -1,8 +1,8 @@
 package com.tiagosune.inventory_api.service;
 
-import com.tiagosune.inventory_api.dto.RawMaterialCreateRequest;
-import com.tiagosune.inventory_api.dto.RawMaterialResponse;
-import com.tiagosune.inventory_api.dto.RawMaterialUpdateRequest;
+import com.tiagosune.inventory_api.dto.rawmaterial.RawMaterialCreateRequest;
+import com.tiagosune.inventory_api.dto.rawmaterial.RawMaterialResponse;
+import com.tiagosune.inventory_api.dto.rawmaterial.RawMaterialUpdateRequest;
 import com.tiagosune.inventory_api.entity.RawMaterial;
 import com.tiagosune.inventory_api.exception.BusinessException;
 import com.tiagosune.inventory_api.exception.ResourceNotFoundException;
