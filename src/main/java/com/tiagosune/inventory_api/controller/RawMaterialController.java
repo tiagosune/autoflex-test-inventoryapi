@@ -14,7 +14,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/raw-material")
+@RequestMapping("/api/raw-materials")
 public class RawMaterialController {
 
     private final RawMaterialService rawMaterialService;
@@ -24,7 +24,7 @@ public class RawMaterialController {
 
         RawMaterialResponse response = rawMaterialService.create(request);
 
-        return ResponseEntity.created(URI.create("/api/raw-material/" + response.getId())).body(response);
+        return ResponseEntity.created(URI.create("/api/raw-materials/" + response.getId())).body(response);
     }
 
     @PutMapping("/{id}")
