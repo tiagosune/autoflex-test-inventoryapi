@@ -65,6 +65,11 @@ public class RawMaterialService {
                 .toList();
     }
 
+    public RawMaterial findEntityByIdOrThrow(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Raw material not found"));
+    }
+
     //private methods
 
     private RawMaterial findEntityById(Long id) {
