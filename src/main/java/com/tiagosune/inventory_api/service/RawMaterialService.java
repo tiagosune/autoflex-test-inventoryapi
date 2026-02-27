@@ -54,7 +54,7 @@ public class RawMaterialService {
         repository.delete(rawMaterial);
     }
 
-    public RawMaterialResponse findById (Long id) {
+    public RawMaterialResponse findRawMaterialById(Long id) {
         RawMaterial rawMaterial = findEntityById(id);
         return mapToResponse(rawMaterial);
     }

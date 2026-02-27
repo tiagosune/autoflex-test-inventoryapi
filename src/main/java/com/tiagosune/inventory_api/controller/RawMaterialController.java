@@ -40,7 +40,7 @@ public class RawMaterialController {
 
     @GetMapping("/{id}")
     public ResponseEntity<RawMaterialResponse> getRawMaterialById (@PathVariable Long id) {
-        RawMaterialResponse response = rawMaterialService.findById(id);
+        RawMaterialResponse response = rawMaterialService.findRawMaterialById(id);
         return ResponseEntity.ok(response);
     }
 
