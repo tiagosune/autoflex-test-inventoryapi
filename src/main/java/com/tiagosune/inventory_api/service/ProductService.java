@@ -23,7 +23,7 @@ public class ProductService {
     private final ProductRepository repository;
     private final RawMaterialService rawMaterialService;
 
-    public ProductResponse createProduct (ProductRequest request) {
+    public ProductResponse createProduct(ProductRequest request) {
 
         validateRawMaterials(request.getRawMaterials());
         validateDuplicatedRawMaterials(request.getRawMaterials());
@@ -42,9 +42,7 @@ public class ProductService {
         for (ProductRawMaterialRequest item : request.getRawMaterials()) {
             RawMaterial rawMaterial = rawMaterialService.findEntityByIdOrThrow(item.getRawMaterialId());
 
-            if (item.getRequiredQuantity().compareTo(BigDecimal.ZERO) <= 0) {
-                throw new BusinessException("Required quantity must be greater than zero");
-            }
+            validateRequiredQuantity(item);
 
             ProductRawMaterial prm = ProductRawMaterial.builder()
                     .product(product)
@@ -62,7 +60,7 @@ public class ProductService {
         return mapToResponse(product);
     }
 
-    public ProductResponse updateProduct (Long id, ProductUpdateRequest request) {
+    public ProductResponse updateProductBasicData(Long id, ProductUpdateRequest request) {
         Product product = findEntityById(id);
 
         validateName(request.getName());
@@ -76,18 +74,43 @@ public class ProductService {
         return mapToResponse(product);
     }
 
-    public void deleteProduct (Long id) {
+    public ProductResponse addRawMaterials(Long productId, ProductRawMaterialRequest request) {
+        Product product = findEntityById(productId);
+        RawMaterial rawMaterialEntity = rawMaterialService.findEntityByIdOrThrow(request.getRawMaterialId());
+
+        if (product.getRawMaterials().stream().anyMatch(prm -> prm
+                .getRawMaterial()
+                .getId()
+                .equals(rawMaterialEntity.getId()))) {
+            throw new BusinessException("Raw material already exists in the composition");
+        }
+
+        validateRequiredQuantity(request);
+
+        ProductRawMaterial prm = ProductRawMaterial.builder()
+                .product(product)
+                .rawMaterial(rawMaterialEntity)
+                .requiredQuantity(request.getRequiredQuantity())
+                .build();
+
+        product.getRawMaterials().add(prm);
+        repository.save(product);
+
+        return mapToResponse(product);
+    }
+
+    public void deleteProduct(Long id) {
         Product product = findEntityById(id);
         repository.delete(product);
     }
 
-    public ProductResponse findProductById (Long id) {
+    public ProductResponse findProductById(Long id) {
         Product product = findEntityById(id);
 
         return mapToResponse(product);
     }
 
-    public List<ProductResponse> findAllProducts () {
+    public List<ProductResponse> findAllProducts() {
         return repository.findAll().stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -95,30 +118,30 @@ public class ProductService {
 
     //private methods
 
-    private Product findEntityById (Long id) {
+    private Product findEntityById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
-    private void validateUniqueCode (String code) {
+    private void validateUniqueCode(String code) {
         if (repository.existsByCode(code)) {
             throw new BusinessException("Code already exists");
         }
     }
 
-    private void validateName (String name) {
+    private void validateName(String name) {
         if (name.isBlank()) {
             throw new BusinessException("Name cannot be blank");
         }
     }
 
-    private void validatePrice (BigDecimal price) {
+    private void validatePrice(BigDecimal price) {
         if (price.compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException("Price cannot be negative");
         }
     }
 
-    private void validateRawMaterials (List<ProductRawMaterialRequest> rawMaterial) {
+    private void validateRawMaterials(List<ProductRawMaterialRequest> rawMaterial) {
         if (rawMaterial == null || rawMaterial.isEmpty()) {
             throw new BusinessException("Raw materials cannot be empty");
         }
@@ -146,7 +169,7 @@ public class ProductService {
                 .build();
     }
 
-    private void validateDuplicatedRawMaterials (List<ProductRawMaterialRequest> rawMaterialIds) {
+    private void validateDuplicatedRawMaterials(List<ProductRawMaterialRequest> rawMaterialIds) {
         List<Long> ids = rawMaterialIds.stream()
                 .map(ProductRawMaterialRequest::getRawMaterialId)
                 .toList();
@@ -155,6 +178,12 @@ public class ProductService {
 
         if (uniqueIds.size() != ids.size()) {
             throw new BusinessException("Raw materials must be unique");
+        }
+    }
+
+    private void validateRequiredQuantity (ProductRawMaterialRequest request){
+        if (request.getRequiredQuantity().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BusinessException("Required quantity must be greater than zero");
         }
     }
 }
