@@ -46,7 +46,7 @@ public class RawMaterialController {
 
     @GetMapping
     public ResponseEntity<List<RawMaterialResponse>> getAllRawMaterials () {
-        return ResponseEntity.ok(rawMaterialService.findAll());
+        return ResponseEntity.ok(rawMaterialService.findAllRawMaterials());
     }
 
 }

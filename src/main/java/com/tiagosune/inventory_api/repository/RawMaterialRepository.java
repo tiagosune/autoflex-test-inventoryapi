@@ -5,7 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RawMaterialRepository extends JpaRepository<RawMaterial, Long> {
 
-    RawMaterial findByCode(String code);
-
     boolean existsByCode(String code);
 }

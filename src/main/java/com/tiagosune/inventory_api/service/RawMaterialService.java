@@ -59,7 +59,7 @@ public class RawMaterialService {
         return mapToResponse(rawMaterial);
     }
 
-    public List<RawMaterialResponse> findAll () {
+    public List<RawMaterialResponse> findAllRawMaterials() {
         return repository.findAll().stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -84,6 +84,12 @@ public class RawMaterialService {
         }
     }
 
+    private void validateName (String name) {
+        if (name.isBlank()) {
+            throw new BusinessException("Name cannot be blank");
+        }
+    }
+
     private RawMaterialResponse mapToResponse(RawMaterial rawMaterial) {
         return RawMaterialResponse.builder()
                 .id(rawMaterial.getId())
@@ -92,11 +98,4 @@ public class RawMaterialService {
                 .stockQuantity(rawMaterial.getStockQuantity())
                 .build();
     }
-
-    private void validateName (String name) {
-        if (name.isBlank()) {
-            throw new BusinessException("Name cannot be blank");
-        }
-    }
-
 }
