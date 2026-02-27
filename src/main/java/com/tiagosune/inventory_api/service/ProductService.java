@@ -101,11 +101,11 @@ public class ProductService {
         return mapToResponse(product);
     }
 
-    public ProductResponse updateRawMaterialQuantity(Long productId, Long rawMaterialId, BigDecimal newQuantity) {
+    public ProductResponse updateRawMaterialQuantity(Long productId, Long rawMaterialId, UpdateRequiredQuantityRequest request) {
 
         Product product = findEntityById(productId);
 
-        if (newQuantity.compareTo(BigDecimal.ZERO) <= 0) {
+        if (request.getQuantity().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException("Quantity must be greater than zero");
         }
 
@@ -118,7 +118,7 @@ public class ProductService {
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Raw material is not associated with this product"));
 
-        prmUpdate.setRequiredQuantity(newQuantity);
+        prmUpdate.setRequiredQuantity(request.getQuantity());
         repository.save(product);
 
         return mapToResponse(product);
