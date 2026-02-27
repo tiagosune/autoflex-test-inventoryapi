@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,7 +31,8 @@ public class Product {
     @Column (nullable = false)
     private BigDecimal price;
 
+    @Builder.Default
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProductRawMaterial> rawMaterials;
+    private List<ProductRawMaterial> rawMaterials = new ArrayList<>();
 
 }
