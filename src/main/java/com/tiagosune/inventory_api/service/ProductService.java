@@ -105,7 +105,7 @@ public class ProductService {
 
         Product product = findEntityById(productId);
 
-        if (request.getQuantity().compareTo(BigDecimal.ZERO) <= 0) {
+        if (request.getRequiredQuantity().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException("Quantity must be greater than zero");
         }
 
@@ -118,7 +118,7 @@ public class ProductService {
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Raw material is not associated with this product"));
 
-        prmUpdate.setRequiredQuantity(request.getQuantity());
+        prmUpdate.setRequiredQuantity(request.getRequiredQuantity());
         repository.save(product);
 
         return mapToResponse(product);

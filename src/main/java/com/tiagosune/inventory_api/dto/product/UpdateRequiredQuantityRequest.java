@@ -11,5 +11,5 @@ public class UpdateRequiredQuantityRequest {
 
     @NotNull
     @DecimalMin(value = "0.0001", inclusive = true)
-    private BigDecimal quantity;
+    private BigDecimal requiredQuantity;
 }
