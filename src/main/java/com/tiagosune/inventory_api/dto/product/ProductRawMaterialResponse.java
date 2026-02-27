@@ -1,16 +1,15 @@
 package com.tiagosune.inventory_api.dto.product;
 
-import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class ProductRawMaterialRequest {
+@Builder
+public class ProductRawMaterialResponse {
 
-    @NotNull
     private Long rawMaterialId;
-
-    @NotNull
+    private String rawMaterialName;
     private BigDecimal requiredQuantity;
 }

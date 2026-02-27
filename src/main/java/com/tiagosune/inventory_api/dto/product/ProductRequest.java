@@ -1,9 +1,12 @@
 package com.tiagosune.inventory_api.dto.product;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class ProductRequest {
@@ -14,10 +17,10 @@ public class ProductRequest {
     @NotBlank
     private String name;
 
-    @NotBlank
+    @NotNull
     private BigDecimal price;
 
-    @NotBlank
-    private Long rawMaterialId;
+    @NotEmpty
+    private List<ProductRawMaterialRequest> rawMaterials;
 
 }
