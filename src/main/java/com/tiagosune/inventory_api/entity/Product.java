@@ -29,4 +29,8 @@ public class Product {
     @Column (nullable = false)
     private BigDecimal price;
 
+    @ManyToOne
+    @JoinColumn (name = "raw_material_id")
+    private RawMaterial rawMaterial;
+
 }
