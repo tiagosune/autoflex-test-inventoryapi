@@ -7,6 +7,7 @@ import com.tiagosune.inventory_api.entity.RawMaterial;
 import com.tiagosune.inventory_api.exception.BusinessException;
 import com.tiagosune.inventory_api.exception.ResourceNotFoundException;
 import com.tiagosune.inventory_api.repository.ProductRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProductService {
 
     private final ProductRepository repository;
@@ -94,6 +96,52 @@ public class ProductService {
                 .build();
 
         product.getRawMaterials().add(prm);
+        repository.save(product);
+
+        return mapToResponse(product);
+    }
+
+    public ProductResponse updateRawMaterialQuantity(Long productId, Long rawMaterialId, BigDecimal newQuantity) {
+
+        Product product = findEntityById(productId);
+
+        if (newQuantity.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BusinessException("Quantity must be greater than zero");
+        }
+
+        ProductRawMaterial prmUpdate = product.getRawMaterials()
+                .stream()
+                .filter(prm -> prm
+                        .getRawMaterial()
+                        .getId()
+                        .equals(rawMaterialId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Raw material is not associated with this product"));
+
+        prmUpdate.setRequiredQuantity(newQuantity);
+        repository.save(product);
+
+        return mapToResponse(product);
+    }
+
+    public ProductResponse removeRawMaterial(Long productId, Long rawMaterialId) {
+        Product product = findEntityById(productId);
+
+
+        ProductRawMaterial prmRemove = product.getRawMaterials()
+                .stream()
+                .filter(prm -> prm
+                        .getRawMaterial()
+                        .getId()
+                        .equals(rawMaterialId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Raw material is not associated with this product"));
+
+        if (product.getRawMaterials().size() == 1) {
+            throw new BusinessException("Product must have at least one raw material");
+        }
+
+        product.getRawMaterials().remove(prmRemove);
         repository.save(product);
 
         return mapToResponse(product);
@@ -181,7 +229,7 @@ public class ProductService {
         }
     }
 
-    private void validateRequiredQuantity (ProductRawMaterialRequest request){
+    private void validateRequiredQuantity(ProductRawMaterialRequest request) {
         if (request.getRequiredQuantity().compareTo(BigDecimal.ZERO) <= 0) {
             throw new BusinessException("Required quantity must be greater than zero");
         }
