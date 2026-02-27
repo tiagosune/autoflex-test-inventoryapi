@@ -8,6 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -29,4 +32,7 @@ public class RawMaterial {
 
     @Column (nullable = false)
     private BigDecimal stockQuantity;
+
+    @OneToMany(mappedBy = "rawMaterial")
+    private List<ProductRawMaterial> products;
 }
