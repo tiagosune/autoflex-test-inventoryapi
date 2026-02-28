@@ -9,6 +9,6 @@ public class ProductProductionResponse {
 
     private Long productId;
     private String productName;
-    private Long quantityProduced;
+    private BigDecimal quantityProduced;
     private BigDecimal totalValue;
 }
