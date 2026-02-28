@@ -8,6 +8,7 @@ import com.tiagosune.inventory_api.exception.BusinessException;
 import com.tiagosune.inventory_api.exception.ResourceNotFoundException;
 import com.tiagosune.inventory_api.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -164,8 +165,8 @@ public class ProductService {
                 .toList();
     }
 
-    public List<Product> findAllEntities() {
-        return repository.findAll();
+    public List<Product> findAllEntitiesOrderedByPriceDesc() {
+        return repository.findAll(Sort.by(Sort.Direction.DESC, "price"));
     }
 
     //private methods
