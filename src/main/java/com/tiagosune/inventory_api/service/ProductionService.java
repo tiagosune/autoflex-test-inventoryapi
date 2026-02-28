@@ -75,19 +75,16 @@ public class ProductionService {
                     stockMap.put(rawMaterialId, newStock);
                 }
 
-                BigDecimal productTotalValue =
-                        product.getPrice().multiply(minPossible);
+                BigDecimal productTotalValue = product.getPrice().multiply(minPossible);
 
-                totalProductionValue =
-                        totalProductionValue.add(productTotalValue);
+                totalProductionValue = totalProductionValue.add(productTotalValue);
 
-                productionList.add(
-                        ProductProductionResponse.builder()
-                                .productId(product.getId())
-                                .productName(product.getName())
-                                .quantityProduced(minPossible)
-                                .totalValue(productTotalValue)
-                                .build()
+                productionList.add(ProductProductionResponse.builder()
+                        .productId(product.getId())
+                        .productName(product.getName())
+                        .quantityProduced(minPossible)
+                        .totalValue(productTotalValue)
+                        .build()
                 );
             }
         }
