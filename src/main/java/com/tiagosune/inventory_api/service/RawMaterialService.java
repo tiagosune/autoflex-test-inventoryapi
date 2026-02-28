@@ -9,12 +9,14 @@ import com.tiagosune.inventory_api.exception.ResourceNotFoundException;
 import com.tiagosune.inventory_api.repository.RawMaterialRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RawMaterialService {
 
     private final RawMaterialRepository repository;
@@ -68,6 +70,10 @@ public class RawMaterialService {
     public RawMaterial findEntityByIdOrThrow(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Raw material not found"));
+    }
+
+    public List<RawMaterial> findAllEntities() {
+        return repository.findAll();
     }
 
     //private methods

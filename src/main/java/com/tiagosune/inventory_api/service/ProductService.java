@@ -7,9 +7,9 @@ import com.tiagosune.inventory_api.entity.RawMaterial;
 import com.tiagosune.inventory_api.exception.BusinessException;
 import com.tiagosune.inventory_api.exception.ResourceNotFoundException;
 import com.tiagosune.inventory_api.repository.ProductRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -162,6 +162,10 @@ public class ProductService {
         return repository.findAll().stream()
                 .map(this::mapToResponse)
                 .toList();
+    }
+
+    public List<Product> findAllEntities() {
+        return repository.findAll();
     }
 
     //private methods
