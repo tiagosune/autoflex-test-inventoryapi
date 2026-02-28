@@ -33,9 +33,9 @@ public class RawMaterialService {
                 .stockQuantity(request.getStockQuantity())
                 .build();
 
-        repository.save(rawMaterial);
+        RawMaterial saved = repository.save(rawMaterial);
 
-        return mapToResponse(rawMaterial);
+        return mapToResponse(saved);
     }
 
     public RawMaterialResponse update (Long id, RawMaterialUpdateRequest request) {
