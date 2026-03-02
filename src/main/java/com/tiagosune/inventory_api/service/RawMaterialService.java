@@ -23,8 +23,8 @@ public class RawMaterialService {
 
     public RawMaterialResponse create (RawMaterialCreateRequest request) {
 
-        validateUniqueCode(request.getCode());
         validateName(request.getName());
+        validateUniqueCode(request.getCode());
         validateStock(request.getStockQuantity());
 
         RawMaterial rawMaterial = RawMaterial.builder()
