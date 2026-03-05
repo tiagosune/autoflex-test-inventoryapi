@@ -1,0 +1,25 @@
+<h2>Raw Materials</h2>
+
+<table>
+  <thead>
+  <tr>
+    <th>Code</th>
+    <th>Name</th>
+    <th>Stock</th>
+  </tr>
+  </thead>
+
+  <tbody>
+
+    @for (rm of (rawMaterials$ | async); track rm.id) {
+
+      <tr>
+        <td>{{ rm.code }}</td>
+        <td>{{ rm.name }}</td>
+        <td>{{ rm.stockQuantity }}</td>
+      </tr>
+
+    }
+
+  </tbody>
+</table>
