@@ -230,7 +230,7 @@ public class ProductService {
         Set<Long> uniqueIds = new HashSet<>(ids);
 
         if (uniqueIds.size() != ids.size()) {
-            throw new BusinessException("Raw materials must be unique");
+            throw new BusinessException("Raw material already exists in the product");
         }
     }
 
