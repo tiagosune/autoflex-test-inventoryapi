@@ -200,6 +200,24 @@ public class ProductService {
         }
     }
 
+    private void validateDuplicatedRawMaterials(List<ProductRawMaterialRequest> rawMaterialIds) {
+        List<Long> ids = rawMaterialIds.stream()
+                .map(ProductRawMaterialRequest::getRawMaterialId)
+                .toList();
+
+        Set<Long> uniqueIds = new HashSet<>(ids);
+
+        if (uniqueIds.size() != ids.size()) {
+            throw new BusinessException("Raw material already exists in the product");
+        }
+    }
+
+    private void validateRequiredQuantity(ProductRawMaterialRequest request) {
+        if (request.getRequiredQuantity().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new BusinessException("Required quantity must be greater than zero");
+        }
+    }
+
     private ProductResponse mapToResponse(Product product) {
 
         List<ProductRawMaterialResponse> compositions =
@@ -220,23 +238,5 @@ public class ProductService {
                 .price(product.getPrice())
                 .rawMaterials(compositions)
                 .build();
-    }
-
-    private void validateDuplicatedRawMaterials(List<ProductRawMaterialRequest> rawMaterialIds) {
-        List<Long> ids = rawMaterialIds.stream()
-                .map(ProductRawMaterialRequest::getRawMaterialId)
-                .toList();
-
-        Set<Long> uniqueIds = new HashSet<>(ids);
-
-        if (uniqueIds.size() != ids.size()) {
-            throw new BusinessException("Raw material already exists in the product");
-        }
-    }
-
-    private void validateRequiredQuantity(ProductRawMaterialRequest request) {
-        if (request.getRequiredQuantity().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new BusinessException("Required quantity must be greater than zero");
-        }
     }
 }
