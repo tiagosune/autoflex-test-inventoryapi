@@ -2,7 +2,6 @@ package com.tiagosune.inventory_api.service;
 
 import com.tiagosune.inventory_api.dto.production.ProductProductionResponse;
 import com.tiagosune.inventory_api.dto.production.ProductionPlanResponse;
-import com.tiagosune.inventory_api.dto.rawmaterial.RawMaterialCreateRequest;
 import com.tiagosune.inventory_api.entity.Product;
 import com.tiagosune.inventory_api.entity.ProductRawMaterial;
 import com.tiagosune.inventory_api.entity.RawMaterial;
